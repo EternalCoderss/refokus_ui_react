@@ -1,11 +1,12 @@
 import React from "react";
 import { IoIosReturnRight } from "react-icons/io";
 
-const Button = () => {
+const Button = ({ title = "Get Started" }) => {
   return (
     <>
-      <div className="button min-w-40 px-4 py-2 bg-zinc-100 text-black rounded-full flex items-center justify-between ">
-        <span className="text-sm font-medium">Get Started</span>
+      {/* Removed min-w-40 and replaced it with w-fit to allow the button to size based on its content  */}
+      <div className="button w-fit px-6 py-2 bg-zinc-100 text-black rounded-full flex items-center justify-between gap-2 ">
+        <span className="text-sm font-medium">{title}</span>
         <IoIosReturnRight />
       </div>
     </>
