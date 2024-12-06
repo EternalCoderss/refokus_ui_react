@@ -1,0 +1,14 @@
+FROM node:16.13.1-alpine3.12
+
+WORKDIR /app
+
+COPY package*.json .
+
+
+RUN bun install
+
+COPY . .
+
+CMD ["npm","run", "dev"]
+
+EXPOSE 5173
