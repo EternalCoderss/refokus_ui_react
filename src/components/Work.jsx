@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
 function Work() {
-  // yaha pe image url data obj use kr rahe h--
-
-  var images = [
+  const [images, setImages] = useState([
     {
       url: "https://assets-global.website-files.com/6334198f239547d0f9cd84b3/634ef09178195ce0073e38f3_Refokus%20Tools-1.png",
       top: "50%",
@@ -40,10 +39,53 @@ function Work() {
       left: "55%",
       isActive: false,
     },
-  ];
+  ]);
+
+  const { scrollYProgress } = useScroll();
+
+  const showImages = (ARR) => {
+    setImages((prev) =>
+      prev.map((item, index) =>
+        ARR.includes(index) 
+          ? { ...item, isActive: true }
+          : { ...item, isActive: false }
+      )
+    );
+  };
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log("Page scroll: ", latest);
+    showHideimages(Math.floor(latest * 100));
+  });
+
+  function showHideimages(scrollvalue) {
+    switch (scrollvalue) {
+      case 0:
+        showImages([]);
+        break;
+      case 1:
+        showImages([0]);
+        break;
+      case 2:
+        showImages([0, 1]);
+        break;
+      case 3:
+        showImages([0, 1, 2]);
+        break;
+      case 6:
+        showImages([0, 1, 2, 3]);
+        break;
+      case 8:
+        showImages([0, 1, 2, 3, 4, 5]);
+        break;
+      default:
+        showImages([]); // Handle cases not explicitly defined
+    }
+  }
+
   return (
     <>
-      <div className="work w-full">
+      <div className="work w-full relative h-[100vh]">
         <div className="main relative max-w-screen-xl mx-auto text-center">
           <h1 className="text-[30vw] font-medium select-none tracking-tight leading-none">
             work
@@ -52,12 +94,15 @@ function Work() {
             {images.map(
               (elem, index) =>
                 elem.isActive && (
-                  <img
+                  <motion.img
                     key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: elem.isActive ? 1 : 0 }}
+                    transition={{ duration: 0.5 }}
                     className="absolute w-52 rounded-lg -translate-x-[50%] -translate-y-[50%]"
                     src={elem.url}
                     style={{ top: elem.top, left: elem.left }}
-                    alt=""
+                    alt={`Work image ${index + 1}`}
                   />
                 )
             )}
